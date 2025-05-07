@@ -1,0 +1,34 @@
+using UnityEngine;
+
+public class FallReset : MonoBehaviour
+{
+    public Transform respawnPoint; // Set this to the first platform's position in the Inspector
+    public float fallThreshold = -10f; // Y position that counts as "fallen"
+
+    private Rigidbody2D rb;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        if (respawnPoint == null)
+        {
+            Debug.LogWarning("Respawn point not assigned. Defaulting to current position.");
+            respawnPoint = new GameObject("RespawnPoint").transform;
+            respawnPoint.position = transform.position;
+        }
+    }
+
+    void Update()
+    {
+        if (transform.position.y < fallThreshold)
+        {
+            ResetPosition();
+        }
+    }
+
+    void ResetPosition()
+    {
+        rb.linearVelocity = Vector2.zero; // Stop any movement
+        transform.position = respawnPoint.position;
+    }
+}
